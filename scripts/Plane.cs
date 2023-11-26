@@ -47,7 +47,11 @@ namespace FlightControl
 
         public void Unload()
         {
-            passengers.ForEach(p => p.MarkConnectionComplete(currentConnection));
+            passengers.ForEach(p =>
+            {
+                p.MarkConnectionComplete(currentConnection);
+                p.SetCurrentAirport(origin);
+            });
             passengers.Clear();
         }
 

@@ -96,7 +96,7 @@ namespace FlightControl
                     .ToList();
         }
 
-        private Connection GetConnectionTo(Airport destination)
+        public Connection GetConnectionTo(Airport destination)
         {
             return connections.Find(c => c.HasConnection(destination));
         }
@@ -107,7 +107,9 @@ namespace FlightControl
 
             foreach (var traveller in travellers)
             {
-                var nextDestination = traveller.GetNextAirport(this);
+                var nextDestination = traveller.GetNextAirport();
+                if (nextDestination == null) continue;
+
                 if (travellerDestinations.ContainsKey(nextDestination))
                 {
                     travellerDestinations[nextDestination].Add(traveller);

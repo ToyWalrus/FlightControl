@@ -1,7 +1,6 @@
 using System;
 using Godot;
 
-
 namespace FlightControl
 {
     public class Traveller
@@ -9,37 +8,45 @@ namespace FlightControl
         public Airport Destination { get; private set; }
 
         private Route route;
-        private event EventHandler OnArrival;
+        private Airport currentAirport;
+        public event EventHandler OnArrival;
 
-        public Traveller(Airport destination)
+        public Traveller(Airport origin, Airport destination)
         {
-            SetDestination(destination);
+            SetCurrentAirport(origin);
+            CalculateRouteTo(destination);
         }
 
-        public Traveller(Airport destination, EventHandler onArrival)
+        public Traveller(Airport origin, Airport destination, EventHandler onArrival)
         {
-            SetDestination(destination);
+            SetCurrentAirport(origin);
+            CalculateRouteTo(destination);
             OnArrival += onArrival;
         }
 
-        public void SetDestination(Airport destination)
+        public void CalculateRouteTo(Airport destination)
         {
             Destination = destination;
-            // calculate route
+            route = RouteCalculator.CalculateShortestRoute(currentAirport, destination);
         }
 
-        public void MarkConnectionComplete(Connection connection)
+        public void SetCurrentAirport(Airport airport)
         {
-            route.MarkAsTravelled(connection);
-            if (route.HasArrived)
+            currentAirport = airport;
+            if (currentAirport == Destination)
             {
                 OnArrival?.Invoke(this, EventArgs.Empty);
             }
         }
 
-        public Airport GetNextAirport(Airport currentAirport)
+        public void MarkConnectionComplete(Connection connection)
         {
-            return route.GetNextAirport(currentAirport);
+            route.MarkAsTravelled(connection);
+        }
+
+        public Airport GetNextAirport()
+        {
+            return route?.GetNextAirport(currentAirport);
         }
     }
 }
