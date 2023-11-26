@@ -3,5 +3,4 @@
 [ext_resource type="Script" path="res://scripts/Game.cs" id="1_waeth"]
 
 [node name="Node2D" type="Node2D"]
-position = Vector2(-1, 0)
 script = ExtResource("1_waeth")

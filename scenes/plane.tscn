@@ -1,6 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://bt2xyst8o5iji"]
+[gd_scene load_steps=3 format=3 uid="uid://bt2xyst8o5iji"]
 
 [ext_resource type="Script" path="res://scripts/Plane.cs" id="1_hq43d"]
+[ext_resource type="Texture2D" uid="uid://cfnw48mypnvpo" path="res://graphics/airplane.png" id="2_82ygx"]
 
-[node name="Node2D" type="Node2D"]
+[node name="Plane" type="Node2D"]
 script = ExtResource("1_hq43d")
+Speed = 10.0
+PassengerMax = 5
+MinWaitTime = 1.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_82ygx")

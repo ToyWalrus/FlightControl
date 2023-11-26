@@ -1,6 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://vff62d2qhicn"]
+[gd_scene load_steps=3 format=3 uid="uid://vff62d2qhicn"]
 
 [ext_resource type="Script" path="res://scripts/Airport.cs" id="1_3dw81"]
+[ext_resource type="Texture2D" uid="uid://bryim17jykfin" path="res://icon.svg" id="2_xilhu"]
 
-[node name="Node2D" type="Node2D"]
+[node name="Airport" type="Node2D"]
 script = ExtResource("1_3dw81")
+AirportName = "SLC"
+TravellerMax = 10
+PlaneMax = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(4, 4)
+texture = ExtResource("2_xilhu")
