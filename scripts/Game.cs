@@ -8,7 +8,6 @@ namespace FlightControl
     {
         public List<Plane> Planes { get; set; }
         public List<Airport> Airports { get; set; }
-        public List<Route> Routes { get; set; }
         public List<Traveller> Travellers { get; set; }
 
         // Called when the node enters the scene tree for the first time.
@@ -16,7 +15,6 @@ namespace FlightControl
         {
             Planes = new();
             Airports = new();
-            Routes = new();
             Travellers = new();
         }
 

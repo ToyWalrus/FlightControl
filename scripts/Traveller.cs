@@ -6,20 +6,40 @@ namespace FlightControl
 {
     public class Traveller
     {
-        [Export]
-        public Airport Destination { get; set; }
+        public Airport Destination { get; private set; }
 
-        private event EventHandler Arrived;
+        private Route route;
+        private event EventHandler OnArrival;
 
-        public Traveller() { }
-        public Traveller(EventHandler onArrival)
+        public Traveller(Airport destination)
         {
-            Arrived += onArrival;
+            SetDestination(destination);
         }
 
-        public void Arrive()
+        public Traveller(Airport destination, EventHandler onArrival)
         {
-            Arrived?.Invoke(this, EventArgs.Empty);
+            SetDestination(destination);
+            OnArrival += onArrival;
+        }
+
+        public void SetDestination(Airport destination)
+        {
+            Destination = destination;
+            // calculate route
+        }
+
+        public void MarkConnectionComplete(Connection connection)
+        {
+            route.MarkAsTravelled(connection);
+            if (route.HasArrived)
+            {
+                OnArrival?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        public Airport GetNextAirport(Airport currentAirport)
+        {
+            return route.GetNextAirport(currentAirport);
         }
     }
 }

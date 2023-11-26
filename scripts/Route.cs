@@ -1,10 +1,10 @@
-using System;
 using System.Collections.Generic;
-using Godot;
 
 namespace FlightControl
 {
-    public partial class Route : Node2D
+    // Temporary class to hold data for a connection between two airports.
+    // Each traveller will have a single Route that they need to complete.
+    public class Route
     {
         public System.Collections.ObjectModel.ReadOnlyCollection<Connection> Connections
         {
@@ -12,14 +12,16 @@ namespace FlightControl
         }
         private List<Connection> _connections = new();
 
+        public bool HasArrived { get => _connections.Count == 0; }
+
         public void SetConnections(List<Connection> connections)
         {
             _connections = connections;
         }
 
-        public void AddConnection(Connection connection)
+        public void MarkAsTravelled(Connection connection)
         {
-            _connections.Add(connection);
+            _connections.Remove(connection);
         }
 
         public Airport GetNextAirport(Airport currentAirport)
@@ -31,13 +33,9 @@ namespace FlightControl
 
             foreach (Connection connection in _connections)
             {
-                if (connection.PortA == currentAirport)
+                if (connection.HasConnection(currentAirport))
                 {
-                    return connection.PortB;
-                }
-                else if (connection.PortB == currentAirport)
-                {
-                    return connection.PortA;
+                    return connection.GetOther(currentAirport);
                 }
             }
 

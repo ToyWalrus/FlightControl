@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 namespace FlightControl
@@ -7,56 +7,73 @@ namespace FlightControl
     public partial class Plane : Node2D
     {
         [Export]
-        public int PassengerMax { get; set; }
-
-        [Export]
         public double Speed { get; set; }
 
-        public List<Traveller> Passengers { get; set; }
+        [Export]
+        public int PassengerMax { get; set; }
+        public int PassengerCount { get => passengers.Count; }
 
-        public int PassengerCount { get => Passengers.Count; }
+        [Export]
+        public double MinWaitTime { get; set; }
 
-        public Route CurrentRoute { get; set; }
-
-        public bool IsAvailable { get; private set; }
-
-        private Airport currentLocation;
-        private Airport currentDestination;
+        private Airport origin;
+        private Airport destination;
+        private Connection currentConnection;
+        private readonly List<Traveller> passengers = new();
 
         // Called when the node enters the scene tree for the first time.
         public override void _Ready()
         {
-            Passengers = new();
-            IsAvailable = true;
         }
 
         // Called every frame. 'delta' is the elapsed time since the previous frame.
         public override void _Process(double delta)
         {
-            // Move plane towards destination
-            // If plane is at destination, pause for X seconds
-            // After pause, set new destination
-            // If no new destination, mark as available
+            // If currentDestination != null, move towards it
+            // If at currentDestination, check airport.CanUnloadPlane(this) every X seconds
+            // If true, airport.UnloadPlane(this)
+        }
+
+        public void Land()
+        {
+            origin = destination;
+            destination = null;
+        }
+
+        public void TakeOff()
+        {
+            destination = currentConnection.GetOther(origin);
         }
 
         public void Unload()
         {
-            Passengers.Clear();
+            passengers.ForEach(p => p.MarkConnectionComplete(currentConnection));
+            passengers.Clear();
         }
 
-        public bool CanLoadCount(int count)
+        public void SetConnection(Connection connection)
         {
-            return PassengerCount + count <= PassengerMax;
+            currentConnection = connection;
         }
 
-        public void Load(Traveller traveller)
+        public IEnumerable<Traveller> GetPassengersNotAtFinalDestination(Airport currentAirport)
         {
-            Passengers.Add(traveller);
+            return passengers.Where(p => p.Destination != currentAirport);
         }
 
-        public void Load(List<Traveller> travellers)
+        public IEnumerable<Traveller> Load(List<Traveller> travellers)
         {
-            Passengers.AddRange(travellers);
+            if (PassengerCount + travellers.Count > PassengerMax)
+            {
+                var cutoffIndex = PassengerMax - PassengerCount;
+                passengers.AddRange(travellers.GetRange(0, cutoffIndex));
+                return travellers.GetRange(cutoffIndex, travellers.Count - cutoffIndex);
+            }
+            else
+            {
+                passengers.AddRange(travellers);
+                return new List<Traveller>();
+            }
         }
     }
 }
