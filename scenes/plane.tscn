@@ -3,12 +3,12 @@
 [ext_resource type="Script" path="res://scripts/Plane.cs" id="1_hq43d"]
 [ext_resource type="Texture2D" uid="uid://cfnw48mypnvpo" path="res://graphics/airplane.png" id="2_82ygx"]
 
-[node name="Plane" type="Node2D"]
+[node name="Plane" type="Node2D" groups=["Planes"]]
+z_index = 1
 script = ExtResource("1_hq43d")
-Speed = 10.0
+Speed = 50.0
 PassengerMax = 5
 MinWaitTime = 1.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.1, 0.1)
 texture = ExtResource("2_82ygx")

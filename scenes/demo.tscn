@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://da4pyq5l1ttuf"]
+
+[ext_resource type="Script" path="res://scripts/Demo.cs" id="1_v58lm"]
+[ext_resource type="PackedScene" uid="uid://bt2xyst8o5iji" path="res://scenes/plane.tscn" id="2_iqedu"]
+[ext_resource type="Script" path="res://scripts/Game.cs" id="2_ooitd"]
+[ext_resource type="PackedScene" uid="uid://vff62d2qhicn" path="res://scenes/airport.tscn" id="3_nwen4"]
+
+[node name="demo" type="Node2D"]
+script = ExtResource("1_v58lm")
+PlaneScene = ExtResource("2_iqedu")
+
+[node name="Game" type="Node2D" parent="."]
+script = ExtResource("2_ooitd")
+
+[node name="Airport" parent="." instance=ExtResource("3_nwen4")]
+position = Vector2(186, 275)
+
+[node name="Airport2" parent="." instance=ExtResource("3_nwen4")]
+position = Vector2(1112, 600)
+AirportName = "LAX"

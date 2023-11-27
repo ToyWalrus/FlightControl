@@ -29,14 +29,10 @@ namespace FlightControl
         private readonly List<Traveller> travellers = new();
         private readonly List<Plane> planes = new();
 
-        // Called when the node enters the scene tree for the first time.
-        public override void _Ready()
-        {
-        }
-
         // Called every frame. 'delta' is the elapsed time since the previous frame.
         public override void _Process(double delta)
         {
+            UnloadReadyPlanes();
             UpdatePlaneWaitCounter(delta);
             LoadAndDepartReadyPlanes();
         }
@@ -54,6 +50,7 @@ namespace FlightControl
         public void AddTraveller(Traveller traveller)
         {
             travellers.Add(traveller);
+            UpdateDestinations();
         }
 
         public bool CanLandPlane()
@@ -63,12 +60,15 @@ namespace FlightControl
 
         public void LandPlane(Plane plane)
         {
-            plane.Land();
+            plane.Land(this);
             planes.Add(plane);
+
+            GD.Print($"{plane.Name} arrived at {AirportName}");
         }
 
         public bool CanUnloadPlane(Plane plane)
         {
+            if (plane.PassengerCount == 0) return false;
             if (TravellerCount + plane.PassengerCount <= TravellerMax) return true;
             return TravellerCount + plane.GetPassengersNotAtFinalDestination(this).Count() <= TravellerMax;
         }
@@ -136,9 +136,21 @@ namespace FlightControl
             }
         }
 
-        private void LoadAndDepartReadyPlanes()
+        private void UnloadReadyPlanes()
         {
             foreach (var plane in planes)
+            {
+                if (CanUnloadPlane(plane))
+                {
+                    UnloadPlane(plane);
+                }
+            }
+        }
+
+        private void LoadAndDepartReadyPlanes()
+        {
+            var oldPlaneList = new List<Plane>(planes);
+            foreach (var plane in oldPlaneList)
             {
                 if (planeWaitCounter.ContainsKey(plane) && planeWaitCounter[plane] <= 0)
                 {
@@ -150,7 +162,7 @@ namespace FlightControl
 
         private void LoadPlane(Plane plane)
         {
-            var topDestination = GetTopDestinations(1)[0];
+            var topDestination = GetTopDestinations(1).FirstOrDefault();
             if (topDestination == null) return;
 
             var travellersToLoad = travellerDestinations[topDestination];
@@ -171,6 +183,8 @@ namespace FlightControl
             plane.TakeOff();
             planes.Remove(plane);
             planeWaitCounter.Remove(plane);
+
+            GD.Print($"{plane.Name} departed from {AirportName}");
         }
 
         public static bool operator ==(Airport a, Airport b)

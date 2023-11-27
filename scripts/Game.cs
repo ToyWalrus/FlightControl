@@ -70,7 +70,7 @@ namespace FlightControl
         private void OnTravellerArrived(object sender, EventArgs e)
         {
             var traveller = (Traveller)sender;
-            GD.Print($"Traveller arrived at {traveller.Destination.Name}");
+            GD.Print($"Traveller arrived at {traveller.Destination.AirportName}");
             Travellers.Remove(traveller);
             TripsCompleted++;
         }

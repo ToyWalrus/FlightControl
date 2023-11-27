@@ -1,5 +1,4 @@
 using System;
-using Godot;
 
 namespace FlightControl
 {
@@ -15,13 +14,8 @@ namespace FlightControl
         {
             SetCurrentAirport(origin);
             CalculateRouteTo(destination);
-        }
 
-        public Traveller(Airport origin, Airport destination, EventHandler onArrival)
-        {
-            SetCurrentAirport(origin);
-            CalculateRouteTo(destination);
-            OnArrival += onArrival;
+            origin.AddTraveller(this);
         }
 
         public void CalculateRouteTo(Airport destination)

@@ -25,7 +25,7 @@ namespace FlightControl
                 return connections[0].PortA;
             }
 
-            foreach (Connection connection in connections)
+            foreach (var connection in connections)
             {
                 if (connection.HasConnection(currentAirport))
                 {

@@ -17,8 +17,8 @@ config/icon="res://icon.svg"
 
 [display]
 
-window/size/viewport_width=1280
-window/size/viewport_height=1020
+window/size/viewport_width=1300
+window/size/viewport_height=800
 
 [dotnet]
 

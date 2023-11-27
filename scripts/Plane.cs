@@ -20,29 +20,49 @@ namespace FlightControl
         private Airport destination;
         private Connection currentConnection;
         private readonly List<Traveller> passengers = new();
+        private const float SPEED_MODIFIER = 10;
 
         // Called when the node enters the scene tree for the first time.
         public override void _Ready()
         {
+            GetNode<Sprite2D>("Sprite2D").Visible = false;
         }
 
         // Called every frame. 'delta' is the elapsed time since the previous frame.
         public override void _Process(double delta)
         {
-            // If currentDestination != null, move towards it
-            // If at currentDestination, check airport.CanUnloadPlane(this) every X seconds
-            // If true, airport.UnloadPlane(this)
+            if (destination == null) return;
+
+            // Check if at destination
+            if (GlobalPosition.DistanceTo(destination.GlobalPosition) < SPEED_MODIFIER)
+            {
+                if (destination.CanLandPlane())
+                {
+                    destination.LandPlane(this);
+                }
+            }
+            else
+            {
+                // Update position and rotation
+                var direction = (destination.GlobalPosition - GlobalPosition).Normalized();
+                GlobalPosition += direction * (float)Speed * (float)delta * SPEED_MODIFIER;
+                UpdateRotation();
+            }
         }
 
-        public void Land()
+
+        public void Land(Airport airport)
         {
-            origin = destination;
+            origin = airport;
             destination = null;
+            GetNode<Sprite2D>("Sprite2D").Visible = false;
         }
 
         public void TakeOff()
         {
             destination = currentConnection.GetOther(origin);
+            UpdateRotation();
+            GetNode<Sprite2D>("Sprite2D").Visible = true;
         }
 
         public void Unload()
@@ -58,6 +78,7 @@ namespace FlightControl
         public void SetConnection(Connection connection)
         {
             currentConnection = connection;
+            GD.Print($"Plane {Name} set connection from {connection.PortA.AirportName} to {connection.PortB.AirportName}");
         }
 
         public IEnumerable<Traveller> GetPassengersNotAtFinalDestination(Airport currentAirport)
@@ -73,11 +94,17 @@ namespace FlightControl
                 passengers.AddRange(travellers.GetRange(0, cutoffIndex));
                 return travellers.GetRange(cutoffIndex, travellers.Count - cutoffIndex);
             }
-            else
-            {
-                passengers.AddRange(travellers);
-                return new List<Traveller>();
-            }
+
+            passengers.AddRange(travellers);
+            return new List<Traveller>();
+        }
+
+        private void UpdateRotation()
+        {
+            if (destination == null) return;
+            var direction = (destination.GlobalPosition - GlobalPosition).Normalized();
+            var angle = direction.Angle();
+            Rotation = angle + Mathf.Pi / 2;
         }
     }
 }
