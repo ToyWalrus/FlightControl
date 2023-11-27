@@ -102,8 +102,11 @@ namespace FlightControl
         private void UpdateRotation()
         {
             if (destination == null) return;
+
             var direction = (destination.GlobalPosition - GlobalPosition).Normalized();
             var angle = direction.Angle();
+
+            // Offset by 90 degrees since the sprite is facing up
             Rotation = angle + Mathf.Pi / 2;
         }
     }

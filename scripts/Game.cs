@@ -6,6 +6,9 @@ namespace FlightControl
 {
     public partial class Game : Node2D
     {
+        [Signal]
+        public delegate void OnTripsCompletedUpdatedEventHandler(string count);
+
         public int TripsCompleted { get; private set; }
         public List<Plane> Planes { get; set; }
         public List<Airport> Airports { get; set; }
@@ -73,6 +76,8 @@ namespace FlightControl
             GD.Print($"Traveller arrived at {traveller.Destination.AirportName}");
             Travellers.Remove(traveller);
             TripsCompleted++;
+
+            EmitSignal(SignalName.OnTripsCompletedUpdated, TripsCompleted.ToString());
         }
     }
 }
