@@ -1,9 +1,15 @@
-[gd_scene load_steps=5 format=3 uid="uid://da4pyq5l1ttuf"]
+[gd_scene load_steps=7 format=3 uid="uid://da4pyq5l1ttuf"]
 
 [ext_resource type="Script" path="res://scripts/Demo.cs" id="1_v58lm"]
 [ext_resource type="PackedScene" uid="uid://bt2xyst8o5iji" path="res://scenes/plane.tscn" id="2_iqedu"]
 [ext_resource type="Script" path="res://scripts/Game.cs" id="2_ooitd"]
 [ext_resource type="PackedScene" uid="uid://vff62d2qhicn" path="res://scenes/airport.tscn" id="3_nwen4"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_dny6g"]
+font_size = 32
+
+[sub_resource type="LabelSettings" id="LabelSettings_hjuyu"]
+font_size = 32
 
 [node name="demo" type="Node2D"]
 script = ExtResource("1_v58lm")
@@ -11,6 +17,7 @@ PlaneScene = ExtResource("2_iqedu")
 
 [node name="Game" type="Node2D" parent="."]
 script = ExtResource("2_ooitd")
+travellerCreationInterval = 2.0
 
 [node name="Airport" parent="." instance=ExtResource("3_nwen4")]
 position = Vector2(186, 275)
@@ -18,6 +25,14 @@ position = Vector2(186, 275)
 [node name="Airport2" parent="." instance=ExtResource("3_nwen4")]
 position = Vector2(1112, 600)
 AirportName = "LAX"
+
+[node name="Airport3" parent="." instance=ExtResource("3_nwen4")]
+position = Vector2(970, 197)
+AirportName = "LAN"
+
+[node name="Airport4" parent="." instance=ExtResource("3_nwen4")]
+position = Vector2(529, 644)
+AirportName = "JFK"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 anchors_preset = 15
@@ -33,10 +48,12 @@ grow_vertical = 2
 [node name="Label" type="Label" parent="HBoxContainer"]
 layout_mode = 2
 text = "Current Score:"
+label_settings = SubResource("LabelSettings_dny6g")
 
 [node name="ScoreCount" type="Label" parent="HBoxContainer"]
 layout_mode = 2
 text = "0"
+label_settings = SubResource("LabelSettings_hjuyu")
 horizontal_alignment = 1
 vertical_alignment = 1
 

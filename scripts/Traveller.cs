@@ -14,8 +14,6 @@ namespace FlightControl
         {
             SetCurrentAirport(origin);
             CalculateRouteTo(destination);
-
-            origin.AddTraveller(this);
         }
 
         public void CalculateRouteTo(Airport destination)
