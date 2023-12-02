@@ -2,52 +2,52 @@ using System.Collections.Generic;
 
 namespace FlightControl
 {
-    public class RouteCalculator
-    {
-        public static Route CalculateShortestRoute(Airport start, Airport end)
-        {
-            var queue = new Queue<Airport>();
-            var airportMap = new Dictionary<Airport, Airport>();
+	public class RouteCalculator
+	{
+		public static Route CalculateShortestRoute(Airport start, Airport end)
+		{
+			var queue = new Queue<Airport>();
+			var airportMap = new Dictionary<Airport, Airport>();
 
-            queue.Enqueue(start);
+			queue.Enqueue(start);
 
-            while (queue.Count > 0)
-            {
-                var current = queue.Dequeue();
+			while (queue.Count > 0)
+			{
+				var current = queue.Dequeue();
 
-                if (current == end)
-                {
-                    return ReconstructPath(airportMap, start, end);
-                }
+				if (current == end)
+				{
+					return ReconstructPath(airportMap, start, end);
+				}
 
-                foreach (var connection in current.Connections)
-                {
-                    var next = connection.GetOther(current);
-                    if (!airportMap.ContainsKey(next))
-                    {
-                        airportMap[next] = current;
-                        queue.Enqueue(next);
-                    }
-                }
-            }
+				foreach (var connection in current.Connections)
+				{
+					var next = connection.GetOther(current);
+					if (!airportMap.ContainsKey(next))
+					{
+						airportMap[next] = current;
+						queue.Enqueue(next);
+					}
+				}
+			}
 
-            return null; // No path found
-        }
+			return null; // No path found
+		}
 
-        private static Route ReconstructPath(Dictionary<Airport, Airport> airportMap, Airport start, Airport end)
-        {
-            var path = new List<Connection>();
-            var current = end;
+		private static Route ReconstructPath(Dictionary<Airport, Airport> airportMap, Airport start, Airport end)
+		{
+			var path = new List<Connection>();
+			var current = end;
 
-            while (current != start)
-            {
-                path.Add(current.GetConnectionTo(airportMap[current]));
-                current = airportMap[current];
-            }
+			while (current != start)
+			{
+				path.Add(current.GetConnectionTo(airportMap[current]));
+				current = airportMap[current];
+			}
 
-            path.Reverse();
+			path.Reverse();
 
-            return new Route(path);
-        }
-    }
+			return new Route(path);
+		}
+	}
 }
