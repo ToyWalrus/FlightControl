@@ -20,7 +20,7 @@ namespace FlightControl
 					return ReconstructPath(airportMap, start, end);
 				}
 
-				foreach (var connection in current.Connections)
+				foreach (var connection in current.GetConnections())
 				{
 					var next = connection.GetOther(current);
 					if (!airportMap.ContainsKey(next))

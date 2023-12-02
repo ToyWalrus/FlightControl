@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://da4pyq5l1ttuf"]
+[gd_scene load_steps=8 format=3 uid="uid://da4pyq5l1ttuf"]
 
 [ext_resource type="Script" path="res://scripts/Demo.cs" id="1_v58lm"]
 [ext_resource type="PackedScene" uid="uid://bt2xyst8o5iji" path="res://scenes/plane.tscn" id="2_iqedu"]
 [ext_resource type="Script" path="res://scripts/Game.cs" id="2_ooitd"]
 [ext_resource type="PackedScene" uid="uid://vff62d2qhicn" path="res://scenes/airport.tscn" id="3_nwen4"]
+[ext_resource type="Script" path="res://scripts/Connection.cs" id="4_lcbrk"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_dny6g"]
 font_size = 32
@@ -20,18 +21,18 @@ script = ExtResource("2_ooitd")
 travellerCreationInterval = 2.0
 
 [node name="Airport" parent="." instance=ExtResource("3_nwen4")]
-position = Vector2(186, 275)
+position = Vector2(480, 215)
 
 [node name="Airport2" parent="." instance=ExtResource("3_nwen4")]
-position = Vector2(1112, 600)
+position = Vector2(848, 595)
 AirportName = "LAX"
 
 [node name="Airport3" parent="." instance=ExtResource("3_nwen4")]
-position = Vector2(970, 197)
+position = Vector2(1047, 184)
 AirportName = "LAN"
 
 [node name="Airport4" parent="." instance=ExtResource("3_nwen4")]
-position = Vector2(529, 644)
+position = Vector2(241, 614)
 AirportName = "JFK"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
@@ -56,5 +57,20 @@ text = "0"
 label_settings = SubResource("LabelSettings_hjuyu")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Connection1_2" type="Node2D" parent="." node_paths=PackedStringArray("PortA", "PortB") groups=["Connections"]]
+script = ExtResource("4_lcbrk")
+PortA = NodePath("../Airport")
+PortB = NodePath("../Airport2")
+
+[node name="Connection2_3" type="Node2D" parent="." node_paths=PackedStringArray("PortA", "PortB") groups=["Connections"]]
+script = ExtResource("4_lcbrk")
+PortA = NodePath("../Airport2")
+PortB = NodePath("../Airport3")
+
+[node name="Connection3_4" type="Node2D" parent="." node_paths=PackedStringArray("PortA", "PortB") groups=["Connections"]]
+script = ExtResource("4_lcbrk")
+PortA = NodePath("../Airport3")
+PortB = NodePath("../Airport4")
 
 [connection signal="OnTripsCompletedUpdated" from="Game" to="HBoxContainer/ScoreCount" method="set_text"]

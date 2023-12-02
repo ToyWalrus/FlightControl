@@ -8,10 +8,6 @@ namespace FlightControl
 	[Tool]
 	public partial class Airport : Node2D
 	{
-
-		[Signal]
-		public delegate void OnPlaneCountChangedEventHandler(string count);
-
 		[Signal]
 		public delegate void OnTravellerCountChangedEventHandler(string count);
 
@@ -22,27 +18,22 @@ namespace FlightControl
 		public int TravellerMax { get; set; }
 		public int TravellerCount { get => travellers.Count; }
 
-		[Export]
-		public int PlaneMax { get; set; }
-		public int PlaneCount { get => planes.Count; }
-
-		public List<Connection> Connections
-		{
-			get => connections.ToList();
-		}
-
 		private readonly Dictionary<Airport, List<Traveller>> travellerDestinations = new();
 		private readonly Dictionary<Plane, double> planeWaitCounter = new();
 		private readonly HashSet<Connection> connections = new();
 		private readonly List<Traveller> travellers = new();
-		private readonly List<Plane> planes = new();
+		private readonly HashSet<Plane> planes = new();
 
 		// Called every frame. 'delta' is the elapsed time since the previous frame.
 		public override void _Process(double delta)
 		{
-			UnloadReadyPlanes();
 			UpdatePlaneWaitCounter(delta);
 			LoadAndDepartReadyPlanes();
+		}
+
+		public IEnumerable<Connection> GetConnections()
+		{
+			return connections;
 		}
 
 		public bool AddConnection(Connection connection)
@@ -53,11 +44,6 @@ namespace FlightControl
 		public bool RemoveConnection(Connection connection)
 		{
 			return connections.Remove(connection);
-		}
-
-		public bool CanAddTraveller()
-		{
-			return TravellerCount < TravellerMax;
 		}
 
 		public void AddTraveller(Traveller traveller)
@@ -72,39 +58,11 @@ namespace FlightControl
 			UpdateDestinations();
 		}
 
-		public bool CanLandPlane()
+		public void PlaneArrived(Plane plane)
 		{
-			return PlaneCount < PlaneMax;
-		}
-
-		public void LandPlane(Plane plane)
-		{
-			plane.Land(this);
-			planes.Add(plane);
-
-			EmitSignal(SignalName.OnPlaneCountChanged, PlaneCount.ToString());
 			// GD.Print($"{plane.Name} arrived at {AirportName}");
-		}
-
-		public bool CanUnloadPlane(Plane plane)
-		{
-			if (plane.PassengerCount == 0) return false;
-			if (TravellerCount + plane.PassengerCount <= TravellerMax) return true;
-			return TravellerCount + plane.GetPassengersNotAtFinalDestination(this).Count() <= TravellerMax;
-		}
-
-		public void UnloadPlane(Plane plane)
-		{
-			var waitingTravellers = plane.GetPassengersNotAtFinalDestination(this);
-
-			// Unload passengers
-			plane.Unload();
-
-			// Add waiting travellers to airport
-			travellers.AddRange(waitingTravellers);
-
-			// Update destinations after travellers list changed
-			UpdateDestinations();
+			planes.Add(plane);
+			UnloadPlane(plane);
 		}
 
 		public List<Airport> GetTopDestinations(int count)
@@ -119,6 +77,15 @@ namespace FlightControl
 		public Connection GetConnectionTo(Airport destination)
 		{
 			return connections.FirstOrDefault(c => c.HasConnection(destination));
+		}
+
+		private void UnloadPlane(Plane plane)
+		{
+			// Add unloaded travellers to airport
+			travellers.AddRange(plane.Unload());
+
+			// Update destinations after travellers list changed
+			UpdateDestinations();
 		}
 
 		private void UpdateDestinations()
@@ -153,18 +120,7 @@ namespace FlightControl
 				}
 				else
 				{
-					planeWaitCounter.Add(plane, plane.MinWaitTime);
-				}
-			}
-		}
-
-		private void UnloadReadyPlanes()
-		{
-			foreach (var plane in planes)
-			{
-				if (CanUnloadPlane(plane))
-				{
-					UnloadPlane(plane);
+					planeWaitCounter.Add(plane, plane.MaxWaitTime);
 				}
 			}
 		}
@@ -174,9 +130,12 @@ namespace FlightControl
 			var oldPlaneList = new List<Plane>(planes);
 			foreach (var plane in oldPlaneList)
 			{
-				if (planeWaitCounter.ContainsKey(plane) && planeWaitCounter[plane] <= 0)
+				if (planeWaitCounter.ContainsKey(plane))
 				{
 					LoadPlane(plane);
+				}
+				if (planeWaitCounter[plane] <= 0 || plane.IsFull())
+				{
 					DepartPlane(plane);
 				}
 			}
@@ -184,15 +143,19 @@ namespace FlightControl
 
 		private void LoadPlane(Plane plane)
 		{
-			var topDestination = GetTopDestinations(1).FirstOrDefault();
-			if (topDestination == null) return;
+			var planeDestination = plane.GetDestination();
+			if (planeDestination == null)
+			{
+				GD.Print($"{plane.Name} has no destination");
+				return;
+			}
+			if (!travellerDestinations.ContainsKey(planeDestination)) return;
 
-			var travellersToLoad = travellerDestinations[topDestination];
+			var travellersToLoad = travellerDestinations[planeDestination];
 			var travellersStillWaiting = plane.Load(travellersToLoad);
 
 			if (travellersToLoad.Count > 0)
 			{
-				plane.SetConnection(GetConnectionTo(topDestination));
 				travellers.RemoveAll(t => travellersToLoad.Contains(t) && !travellersStillWaiting.Contains(t));
 				UpdateDestinations();
 			}
@@ -200,44 +163,10 @@ namespace FlightControl
 
 		private void DepartPlane(Plane plane)
 		{
-			if (plane.PassengerCount == 0) return;
-
 			plane.TakeOff();
 			planes.Remove(plane);
 			planeWaitCounter.Remove(plane);
-
-			EmitSignal(SignalName.OnPlaneCountChanged, PlaneCount.ToString());
 			// GD.Print($"{plane.Name} departed from {AirportName}");
-		}
-
-		public static bool operator ==(Airport a, Airport b)
-		{
-			if (ReferenceEquals(a, b))
-			{
-				return true;
-			}
-
-			return a?.Equals(b) ?? false;
-		}
-
-		public static bool operator !=(Airport a, Airport b)
-		{
-			return !(a == b);
-		}
-
-		public override bool Equals(object obj)
-		{
-			if (obj == null || GetType() != obj.GetType())
-			{
-				return false;
-			}
-
-			return AirportName == ((Airport)obj).AirportName;
-		}
-
-		public override int GetHashCode()
-		{
-			return AirportName.GetHashCode();
 		}
 	}
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
@@ -14,36 +13,26 @@ namespace FlightControl
 		{
 			var game = GetNode<Game>("Game");
 			var airports = new List<Airport>();
+			var connections = new List<Connection>();
+
 			airports.AddRange(GetTree().GetNodesInGroup("Airports").AsEnumerable().Cast<Airport>());
+			connections.AddRange(GetTree().GetNodesInGroup("Connections").AsEnumerable().Cast<Connection>());
+
 
 			foreach (Airport airport in airports)
 			{
 				game.AddAirport(airport);
 			}
 
-			if (airports.Count > 1)
+			foreach (Connection connection in connections)
 			{
-				for (int i = 0; i < airports.Count; i++)
-				{
-					var airport = airports[i];
-					var plane = PlaneScene.Instantiate<Plane>();
-					plane.Name = $"Plane {i + 1}";
-					plane.GlobalPosition = airport.GlobalPosition;
-					airport.LandPlane(plane);
-					game.AddChild(plane);
+				game.AddConnection(connection);
 
-					for (int j = i + 1; j < airports.Count; j++)
-					{
-						var otherAirport = airports[j];
-						var con = new Connection
-						{
-							PortA = airport,
-							PortB = otherAirport
-						};
-						game.AddConnection(con);
-						game.AddChild(con);
-					}
-				}
+				var plane = PlaneScene.Instantiate<Plane>();
+				plane.SetConnection(connection);
+				plane.Name = $"{connection.PortA.AirportName} to {connection.PortB.AirportName}";
+
+				game.AddChild(plane);
 			}
 		}
 	}

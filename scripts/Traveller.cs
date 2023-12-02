@@ -5,6 +5,7 @@ namespace FlightControl
 	public class Traveller
 	{
 		public Airport Destination { get; private set; }
+		public bool HasArrivedAtDestination { get => currentAirport == Destination; }
 
 		private Route route;
 		private Airport currentAirport;

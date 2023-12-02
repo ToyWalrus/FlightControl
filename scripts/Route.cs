@@ -20,6 +20,11 @@ namespace FlightControl
 
 		public Airport GetNextAirport(Airport currentAirport)
 		{
+			if (connections.Count == 0)
+			{
+				return null;
+			}
+
 			if (currentAirport == null)
 			{
 				return connections[0].PortA;

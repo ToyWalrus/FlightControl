@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 
 namespace FlightControl
@@ -48,6 +49,16 @@ namespace FlightControl
 		private Color _highlightColor = Colors.Red;
 
 		public bool ShouldHighlight { get; set; } = false;
+
+		private readonly HashSet<Plane> planes = new();
+
+		public void AddPlane(Plane plane)
+		{
+			if (planes.Add(plane))
+			{
+				plane.SetConnection(this);
+			}
+		}
 
 		public bool HasConnection(Airport a)
 		{
@@ -106,37 +117,6 @@ namespace FlightControl
 		public static int CalculateCost(Airport a, Airport b)
 		{
 			return 0;
-		}
-
-		public static bool operator ==(Connection a, Connection b)
-		{
-			if (ReferenceEquals(a, b))
-			{
-				return true;
-			}
-
-			return a?.Equals(b) ?? false;
-		}
-
-		public static bool operator !=(Connection a, Connection b)
-		{
-			return !(a == b);
-		}
-
-		public override bool Equals(object obj)
-		{
-			if (obj == null || GetType() != obj.GetType())
-			{
-				return false;
-			}
-
-			var other = (Connection)obj;
-			return (PortA == other.PortA && PortB == other.PortB) || (PortA == other.PortB && PortB == other.PortA);
-		}
-
-		public override int GetHashCode()
-		{
-			return PortA?.GetHashCode() ?? 0 + ((PortB?.GetHashCode() ?? 0) * 3);
 		}
 	}
 }

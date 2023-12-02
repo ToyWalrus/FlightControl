@@ -7,18 +7,21 @@ namespace FlightControl
 	public partial class Plane : Node2D
 	{
 		[Export]
-		public double Speed { get; set; }
+		public double Speed { get; set; } = 5;
 
 		[Export]
 		public int PassengerMax { get; set; }
 		public int PassengerCount { get => passengers.Count; }
 
 		[Export]
-		public double MinWaitTime { get; set; }
+		public Connection Connection { get; set; }
 
-		private Airport origin;
+		// in seconds
+		[Export]
+		public double MaxWaitTime { get; set; } = 3;
+
+		private Airport currentAirport;
 		private Airport destination;
-		private Connection currentConnection;
 		private readonly List<Traveller> passengers = new();
 		private const float SPEED_MODIFIER = 10;
 
@@ -36,10 +39,7 @@ namespace FlightControl
 			// Check if at destination
 			if (GlobalPosition.DistanceTo(destination.GlobalPosition) < SPEED_MODIFIER)
 			{
-				if (destination.CanLandPlane())
-				{
-					destination.LandPlane(this);
-				}
+				Land(destination);
 			}
 			else
 			{
@@ -50,40 +50,37 @@ namespace FlightControl
 			}
 		}
 
-
-		public void Land(Airport airport)
+		public bool IsFull()
 		{
-			origin = airport;
-			destination = null;
-			GetNode<Sprite2D>("Sprite2D").Visible = false;
+			return PassengerCount == PassengerMax;
 		}
 
-		public void TakeOff()
+		public void SetConnection(Connection connection, bool portAIsCurrent = true)
 		{
-			destination = currentConnection.GetOther(origin);
-			UpdateRotation();
-			GetNode<Sprite2D>("Sprite2D").Visible = true;
+			Connection = connection;
+			connection.AddPlane(this);
+
+			Land(portAIsCurrent ? connection.PortA : connection.PortB);
 		}
 
-		public void Unload()
+		public Airport GetDestination()
+		{
+			return Connection.GetOther(currentAirport);
+		}
+
+		public IEnumerable<Traveller> Unload()
 		{
 			passengers.ForEach(p =>
 			{
-				p.MarkConnectionComplete(currentConnection);
-				p.SetCurrentAirport(origin);
+				p.MarkConnectionComplete(Connection);
+				p.SetCurrentAirport(currentAirport);
 			});
+
+			var unloaded = passengers.Where(p => !p.HasArrivedAtDestination).ToList();
+
 			passengers.Clear();
-		}
 
-		public void SetConnection(Connection connection)
-		{
-			currentConnection = connection;
-			// GD.Print($"Plane {Name} set connection from {connection.PortA.AirportName} to {connection.PortB.AirportName}");
-		}
-
-		public IEnumerable<Traveller> GetPassengersNotAtFinalDestination(Airport currentAirport)
-		{
-			return passengers.Where(p => p.Destination != currentAirport);
+			return unloaded;
 		}
 
 		public IEnumerable<Traveller> Load(List<Traveller> travellers)
@@ -99,6 +96,24 @@ namespace FlightControl
 			return new List<Traveller>();
 		}
 
+		public void TakeOff()
+		{
+			destination = GetDestination();
+			currentAirport = null;
+			UpdateRotation();
+			SetPlaneColorIndicator();
+			GetNode<Sprite2D>("Sprite2D").Visible = true;
+		}
+
+		private void Land(Airport airport)
+		{
+			airport.PlaneArrived(this);
+			currentAirport = airport;
+			destination = null;
+			GlobalPosition = airport.GlobalPosition;
+			GetNode<Sprite2D>("Sprite2D").Visible = false;
+		}
+
 		private void UpdateRotation()
 		{
 			if (destination == null) return;
@@ -108,6 +123,28 @@ namespace FlightControl
 
 			// Offset by 90 degrees since the sprite is facing up
 			Rotation = angle + Mathf.Pi / 2;
+		}
+
+		private void SetPlaneColorIndicator()
+		{
+			var sprite = GetNode<Sprite2D>("Sprite2D");
+			var material = sprite.Material as ShaderMaterial;
+
+			if (PassengerCount == 0)
+			{
+				material.SetShaderParameter("color", Colors.White);
+				return;
+			}
+
+			var emptyColor = Colors.Green;
+			var fullColor = Colors.Red;
+			var percentFull = (float)PassengerCount / PassengerMax;
+
+			var r = Mathf.Lerp(emptyColor.R, fullColor.R, percentFull);
+			var g = Mathf.Lerp(emptyColor.G, fullColor.G, percentFull);
+			var b = Mathf.Lerp(emptyColor.B, fullColor.B, percentFull);
+
+			material.SetShaderParameter("color", new Color(r, g, b));
 		}
 	}
 }
