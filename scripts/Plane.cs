@@ -78,7 +78,7 @@ namespace FlightControl
 		public void SetConnection(Connection connection)
 		{
 			currentConnection = connection;
-			GD.Print($"Plane {Name} set connection from {connection.PortA.AirportName} to {connection.PortB.AirportName}");
+			// GD.Print($"Plane {Name} set connection from {connection.PortA.AirportName} to {connection.PortB.AirportName}");
 		}
 
 		public IEnumerable<Traveller> GetPassengersNotAtFinalDestination(Airport currentAirport)

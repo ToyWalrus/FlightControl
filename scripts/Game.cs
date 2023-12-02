@@ -62,10 +62,14 @@ namespace FlightControl
 				if (connection.HasConnection(airport))
 				{
 					// Add connection to both airports
-					airport.AddConnection(connection);
-					connection.GetOther(airport).AddConnection(connection);
-					connectionAdded = true;
-					break;
+					var addedToA = airport.AddConnection(connection);
+					var addedToB = connection.GetOther(airport).AddConnection(connection);
+					connectionAdded = addedToA && addedToB;
+
+					if (connectionAdded)
+					{
+						break;
+					}
 				}
 			}
 

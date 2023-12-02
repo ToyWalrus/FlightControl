@@ -5,6 +5,7 @@ using Godot;
 
 namespace FlightControl
 {
+	[Tool]
 	public partial class Airport : Node2D
 	{
 
@@ -25,14 +26,14 @@ namespace FlightControl
 		public int PlaneMax { get; set; }
 		public int PlaneCount { get => planes.Count; }
 
-		public System.Collections.ObjectModel.ReadOnlyCollection<Connection> Connections
+		public List<Connection> Connections
 		{
-			get => connections.AsReadOnly();
+			get => connections.ToList();
 		}
 
 		private readonly Dictionary<Airport, List<Traveller>> travellerDestinations = new();
 		private readonly Dictionary<Plane, double> planeWaitCounter = new();
-		private readonly List<Connection> connections = new();
+		private readonly HashSet<Connection> connections = new();
 		private readonly List<Traveller> travellers = new();
 		private readonly List<Plane> planes = new();
 
@@ -44,9 +45,14 @@ namespace FlightControl
 			LoadAndDepartReadyPlanes();
 		}
 
-		public void AddConnection(Connection connection)
+		public bool AddConnection(Connection connection)
 		{
-			connections.Add(connection);
+			return connections.Add(connection);
+		}
+
+		public bool RemoveConnection(Connection connection)
+		{
+			return connections.Remove(connection);
 		}
 
 		public bool CanAddTraveller()
@@ -112,7 +118,7 @@ namespace FlightControl
 
 		public Connection GetConnectionTo(Airport destination)
 		{
-			return connections.Find(c => c.HasConnection(destination));
+			return connections.FirstOrDefault(c => c.HasConnection(destination));
 		}
 
 		private void UpdateDestinations()
