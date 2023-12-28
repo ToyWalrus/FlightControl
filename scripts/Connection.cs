@@ -58,6 +58,11 @@ namespace FlightControl
 			{
 				plane.SetConnection(this);
 			}
+
+			if (plane.GetParent() == null)
+			{
+				AddChild(plane);
+			}
 		}
 
 		public bool HasConnection(Airport a)
@@ -117,6 +122,24 @@ namespace FlightControl
 		public static int CalculateCost(Airport a, Airport b)
 		{
 			return 0;
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (obj == null || GetType() != obj.GetType())
+			{
+				return false;
+			}
+
+			var other = (Connection)obj;
+			return IsValid() && other.IsValid() && ((PortA == other.PortA && PortB == other.PortB) || (PortA == other.PortB && PortB == other.PortA));
+		}
+
+		public override int GetHashCode()
+		{
+			if (PortA != null && PortB != null) return PortA.GetHashCode() ^ PortB.GetHashCode();
+			if (PortA != null) return PortA.GetHashCode();
+			return PortB.GetHashCode();
 		}
 	}
 }

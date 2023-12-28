@@ -1,6 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://daawtw2blcgwm"]
+[gd_scene load_steps=5 format=3 uid="uid://daawtw2blcgwm"]
 
 [ext_resource type="Script" path="res://scripts/Game.cs" id="1_waeth"]
+[ext_resource type="Script" path="res://scripts/ConnectionCreator.cs" id="2_6avi7"]
+[ext_resource type="PackedScene" uid="uid://cl1byx6f0wua6" path="res://scenes/connection.tscn" id="3_lmc8d"]
+[ext_resource type="PackedScene" uid="uid://bt2xyst8o5iji" path="res://scenes/plane.tscn" id="4_07aqr"]
 
-[node name="Node2D" type="Node2D"]
+[node name="Game" type="Node2D"]
 script = ExtResource("1_waeth")
+
+[node name="ConnectionCreator" type="Node2D" parent="."]
+script = ExtResource("2_6avi7")
+ConnectionScene = ExtResource("3_lmc8d")
+PlaneScene = ExtResource("4_07aqr")

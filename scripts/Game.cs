@@ -19,6 +19,7 @@ namespace FlightControl
 		public List<Traveller> Travellers { get; set; }
 
 		private double travellerCreationCounter = 0;
+		private ConnectionCreator connectionCreator;
 
 		// Called when the node enters the scene tree for the first time.
 		public override void _Ready()
@@ -27,6 +28,8 @@ namespace FlightControl
 			Airports = new();
 			Travellers = new();
 			TripsCompleted = 0;
+
+			connectionCreator = GetNode<ConnectionCreator>("ConnectionCreator");
 		}
 
 		// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -43,6 +46,7 @@ namespace FlightControl
 		public void AddAirport(Airport airport)
 		{
 			Airports.Add(airport);
+			connectionCreator.NewAirportAdded(airport);
 		}
 
 		public void CreateTraveller(Airport origin, Airport destination)

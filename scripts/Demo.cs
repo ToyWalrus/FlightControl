@@ -13,10 +13,10 @@ namespace FlightControl
 		{
 			var game = GetNode<Game>("Game");
 			var airports = new List<Airport>();
-			var connections = new List<Connection>();
+			// var connections = new List<Connection>();
 
 			airports.AddRange(GetTree().GetNodesInGroup("Airports").AsEnumerable().Cast<Airport>());
-			connections.AddRange(GetTree().GetNodesInGroup("Connections").AsEnumerable().Cast<Connection>());
+			// connections.AddRange(GetTree().GetNodesInGroup("Connections").AsEnumerable().Cast<Connection>());
 
 
 			foreach (Airport airport in airports)
@@ -24,16 +24,16 @@ namespace FlightControl
 				game.AddAirport(airport);
 			}
 
-			foreach (Connection connection in connections)
-			{
-				game.AddConnection(connection);
+			// foreach (Connection connection in connections)
+			// {
+			// 	game.AddConnection(connection);
 
-				var plane = PlaneScene.Instantiate<Plane>();
-				plane.SetConnection(connection);
-				plane.Name = $"{connection.PortA.AirportName} to {connection.PortB.AirportName}";
+			// 	var plane = PlaneScene.Instantiate<Plane>();
+			// 	plane.SetConnection(connection);
+			// 	plane.Name = $"{connection.PortA.AirportName} to {connection.PortB.AirportName}";
 
-				game.AddChild(plane);
-			}
+			// 	game.AddChild(plane);
+			// }
 		}
 	}
 }

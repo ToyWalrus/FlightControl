@@ -6,10 +6,12 @@ using Godot;
 namespace FlightControl
 {
 	[Tool]
-	public partial class Airport : Node2D
+	public partial class Airport : Area2D
 	{
 		[Signal]
 		public delegate void OnTravellerCountChangedEventHandler(string count);
+		[Signal]
+		public delegate void OnClickAirportEventHandler(Airport airport);
 
 		[Export]
 		public string AirportName { get; set; }
@@ -44,6 +46,11 @@ namespace FlightControl
 		public bool RemoveConnection(Connection connection)
 		{
 			return connections.Remove(connection);
+		}
+
+		public bool IsConnectedTo(Airport airport)
+		{
+			return connections.Any(c => c.HasConnection(airport));
 		}
 
 		public void AddTraveller(Traveller traveller)
@@ -167,6 +174,14 @@ namespace FlightControl
 			planes.Remove(plane);
 			planeWaitCounter.Remove(plane);
 			// GD.Print($"{plane.Name} departed from {AirportName}");
+		}
+
+		public override void _InputEvent(Viewport _, InputEvent @event, int __)
+		{
+			if (@event.IsActionPressed("click"))
+			{
+				EmitSignal(SignalName.OnClickAirport, this);
+			}
 		}
 	}
 }
