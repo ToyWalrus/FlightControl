@@ -21,11 +21,15 @@ texture = ExtResource("2_xilhu")
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -115.0
-offset_top = -161.0
-offset_right = 113.0
-offset_bottom = -133.0
+offset_left = -113.0
+offset_top = -182.0
+offset_right = 115.0
+offset_bottom = -132.0
 grow_horizontal = 2
+
+[node name="AirportNameLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Name"
 
 [node name="TravellersLabel" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2

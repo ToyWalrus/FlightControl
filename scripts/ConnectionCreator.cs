@@ -68,6 +68,11 @@ namespace FlightControl
 			}
 		}
 
+		public override void _Process(double delta)
+		{
+			QueueRedraw();
+		}
+
 		public override void _Input(InputEvent @event)
 		{
 			if (Input.IsActionJustPressed("right_click") && clickedAirport != null)
@@ -76,6 +81,23 @@ namespace FlightControl
 				clickedAirport = null;
 
 				GD.Print("Cancelled connection creation");
+			}
+		}
+
+		public override void _Draw()
+		{
+			if (clickedAirport == null) return;
+
+			var airportPos = clickedAirport.GlobalPosition;
+			var mousePos = GetGlobalMousePosition();
+
+			if (ConnectionScene._Bundled.TryGetValue("HighlightColor", out var highlightColor))
+			{
+				DrawLine(airportPos, mousePos, highlightColor.AsColor(), 2);
+			}
+			else
+			{
+				DrawLine(airportPos, mousePos, Colors.White, 2);
 			}
 		}
 	}

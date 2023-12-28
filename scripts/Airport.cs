@@ -26,9 +26,20 @@ namespace FlightControl
 		private readonly List<Traveller> travellers = new();
 		private readonly HashSet<Plane> planes = new();
 
+		public override void _Ready()
+		{
+			SetAirportLabelText();
+		}
+
 		// Called every frame. 'delta' is the elapsed time since the previous frame.
 		public override void _Process(double delta)
 		{
+			// to update the name of the airport in the editor
+			if (Engine.IsEditorHint())
+			{
+				SetAirportLabelText();
+			}
+
 			UpdatePlaneWaitCounter(delta);
 			LoadAndDepartReadyPlanes();
 		}
@@ -182,6 +193,11 @@ namespace FlightControl
 			{
 				EmitSignal(SignalName.OnClickAirport, this);
 			}
+		}
+
+		private void SetAirportLabelText()
+		{
+			GetNode<Label>("VBoxContainer/AirportNameLabel").Text = AirportName;
 		}
 	}
 }
