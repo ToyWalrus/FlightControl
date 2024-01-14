@@ -25,9 +25,7 @@ namespace FlightControl
 
 		public override void _Ready()
 		{
-			Zoom = Vector2.One;
 			viewportSize = GetViewportRect().Size;
-			SetProcessInput(true);
 		}
 
 		public override void _Input(InputEvent @event)

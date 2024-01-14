@@ -11,10 +11,10 @@ centered = false
 metadata/_edit_lock_ = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(6336, 2838)
-zoom = Vector2(0.14, 0.14)
+position = Vector2(6135, 2183)
+zoom = Vector2(0.325, 0.325)
 script = ExtResource("2_s7afb")
 ZoomSpeed = 0.075
 ZoomMin = 0.141
-ZoomMax = 1.5
+ZoomMax = 1.6
 WorldRect = Rect2(0, 0, 11160, 5673)
