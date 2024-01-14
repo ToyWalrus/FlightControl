@@ -29,7 +29,7 @@ grow_horizontal = 2
 
 [node name="AirportNameLabel" type="Label" parent="VBoxContainer"]
 layout_mode = 2
-text = "Name"
+text = "SLC"
 
 [node name="TravellersLabel" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2

@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://u5absxyfkkel"]
+
+[ext_resource type="Texture2D" uid="uid://dinrxeafn3c1j" path="res://graphics/WorldMap.svg" id="1_vd07e"]
+[ext_resource type="Script" path="res://scripts/CameraController.cs" id="2_s7afb"]
+
+[node name="world" type="Node2D"]
+
+[node name="WorldMap" type="Sprite2D" parent="."]
+texture = ExtResource("1_vd07e")
+centered = false
+metadata/_edit_lock_ = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(6336, 2838)
+zoom = Vector2(0.14, 0.14)
+script = ExtResource("2_s7afb")
+ZoomSpeed = 0.075
+ZoomMin = 0.141
+ZoomMax = 1.5
+WorldRect = Rect2(0, 0, 11160, 5673)
