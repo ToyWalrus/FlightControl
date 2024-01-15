@@ -1,34 +1,56 @@
-[gd_scene load_steps=3 format=3 uid="uid://bl2axnlepmg38"]
+[gd_scene load_steps=4 format=3 uid="uid://bl2axnlepmg38"]
 
 [ext_resource type="Theme" uid="uid://bnptngex7lpvf" path="res://graphics/resources/DefaultTheme.tres" id="1_6lj32"]
+[ext_resource type="Script" path="res://scripts/AirportPropertiesPopup.cs" id="2_orlcq"]
 [ext_resource type="FontFile" uid="uid://chp81n4ahq2ul" path="res://graphics/fonts/alegreya-sans/AlegreyaSans-Bold.ttf" id="3_76l8i"]
 
 [node name="AirportProperties" type="PopupPanel"]
 title = "Airport Properties"
-size = Vector2i(350, 380)
+size = Vector2i(400, 170)
 visible = true
 theme = ExtResource("1_6lj32")
+script = ExtResource("2_orlcq")
 
-[node name="GridContainer" type="VBoxContainer" parent="."]
+[node name="Layout" type="VBoxContainer" parent="."]
 offset_left = 16.0
 offset_top = 8.0
-offset_right = 338.0
-offset_bottom = 372.0
+offset_right = 388.0
+offset_bottom = 162.0
 size_flags_vertical = 3
 theme_override_constants/separation = 4
 
-[node name="Title" type="Label" parent="GridContainer"]
+[node name="Title" type="HBoxContainer" parent="Layout"]
 layout_mode = 2
-theme = ExtResource("1_6lj32")
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="PropertiesLabel" type="Label" parent="Layout/Title"]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 40
 text = "Airport Properties"
+vertical_alignment = 1
 
-[node name="Travellers" type="GridContainer" parent="GridContainer"]
+[node name="Airport" type="Label" parent="Layout/Title"]
 layout_mode = 2
-columns = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 34
+text = "(SLC)"
+horizontal_alignment = 2
+vertical_alignment = 1
 
-[node name="Label" type="Label" parent="GridContainer/Travellers"]
+[node name="Divider" type="HSeparator" parent="Layout"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Layout"]
+layout_mode = 2
+
+[node name="Travellers" type="HBoxContainer" parent="Layout/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Layout/VBoxContainer/Travellers"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("1_6lj32")
@@ -36,9 +58,36 @@ theme_override_colors/font_color = Color(0.164706, 0.164706, 0.164706, 1)
 theme_override_fonts/font = ExtResource("3_76l8i")
 text = "Waiting travellers"
 
-[node name="Count" type="Label" parent="GridContainer/Travellers"]
+[node name="Count" type="Label" parent="Layout/VBoxContainer/Travellers"]
 layout_mode = 2
 theme = ExtResource("1_6lj32")
 theme_override_colors/font_color = Color(0.164706, 0.164706, 0.164706, 1)
 theme_override_fonts/font = ExtResource("3_76l8i")
 text = "10"
+horizontal_alignment = 2
+
+[node name="Indented" type="MarginContainer" parent="Layout/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_right = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Layout/VBoxContainer/Indented"]
+layout_mode = 2
+
+[node name="DestinationCountTemplate" type="HBoxContainer" parent="Layout/VBoxContainer/Indented/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Layout/VBoxContainer/Indented/VBoxContainer/DestinationCountTemplate"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.133333, 0.133333, 0.133333, 1)
+text = "Poland"
+
+[node name="Count" type="Label" parent="Layout/VBoxContainer/Indented/VBoxContainer/DestinationCountTemplate"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.133333, 0.133333, 0.133333, 1)
+text = "2
+"
+horizontal_alignment = 2

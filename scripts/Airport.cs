@@ -29,6 +29,7 @@ namespace FlightControl
 		public override void _Ready()
 		{
 			SetAirportLabelText();
+			GetNode<AirportPropertiesPopup>("AirportProperties").SetAirport(this);
 		}
 
 		// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -90,6 +91,13 @@ namespace FlightControl
 					.Select(kvp => kvp.Key)
 					.Take(count)
 					.ToList();
+		}
+
+		public IEnumerable<KeyValuePair<Airport, int>> GetDestinations()
+		{
+			return travellerDestinations
+					.OrderByDescending(kvp => kvp.Value.Count)
+					.Select(kvp => new KeyValuePair<Airport, int>(kvp.Key, kvp.Value.Count));
 		}
 
 		public Connection GetConnectionTo(Airport destination)
@@ -193,11 +201,20 @@ namespace FlightControl
 			{
 				EmitSignal(SignalName.OnClickAirport, this);
 			}
+
+			else if (@event.IsActionPressed("right_click"))
+			{
+				GD.Print($"Right click on {AirportName}");
+
+				var popup = GetNode<AirportPropertiesPopup>("AirportProperties");
+				popup.Position = (Vector2I)GetViewport().GetMousePosition();
+				popup.Popup();
+			}
 		}
 
 		private void SetAirportLabelText()
 		{
-			GetNode<Label>("VBoxContainer/AirportNameLabel").Text = AirportName;
+			GetNode<Label>("AirportNameLabel").Text = AirportName;
 		}
 	}
 }

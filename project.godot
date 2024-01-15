@@ -24,6 +24,10 @@ window/size/viewport_height=800
 
 project/assembly_name="FlightControlGame"
 
+[gui]
+
+theme/custom="res://graphics/resources/DefaultTheme.tres"
+
 [input]
 
 click={

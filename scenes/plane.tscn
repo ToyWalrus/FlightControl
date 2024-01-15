@@ -2,11 +2,11 @@
 
 [ext_resource type="Script" path="res://scripts/Plane.cs" id="1_hq43d"]
 [ext_resource type="Texture2D" uid="uid://cfnw48mypnvpo" path="res://graphics/airplane.png" id="2_82ygx"]
-[ext_resource type="Shader" path="res://graphics/shaders/plane.gdshader" id="2_i0632"]
+[ext_resource type="Shader" path="res://graphics/shaders/plane.gdshader" id="2_j6g15"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_654ih"]
 resource_local_to_scene = true
-shader = ExtResource("2_i0632")
+shader = ExtResource("2_j6g15")
 shader_parameter/color = Color(0, 0, 0, 1)
 
 [node name="Plane" type="Node2D" groups=["Planes"]]
