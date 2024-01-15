@@ -1,0 +1,44 @@
+[gd_scene load_steps=3 format=3 uid="uid://bl2axnlepmg38"]
+
+[ext_resource type="Theme" uid="uid://bnptngex7lpvf" path="res://graphics/resources/DefaultTheme.tres" id="1_6lj32"]
+[ext_resource type="FontFile" uid="uid://chp81n4ahq2ul" path="res://graphics/fonts/alegreya-sans/AlegreyaSans-Bold.ttf" id="3_76l8i"]
+
+[node name="AirportProperties" type="PopupPanel"]
+title = "Airport Properties"
+size = Vector2i(350, 380)
+visible = true
+theme = ExtResource("1_6lj32")
+
+[node name="GridContainer" type="VBoxContainer" parent="."]
+offset_left = 16.0
+offset_top = 8.0
+offset_right = 338.0
+offset_bottom = 372.0
+size_flags_vertical = 3
+theme_override_constants/separation = 4
+
+[node name="Title" type="Label" parent="GridContainer"]
+layout_mode = 2
+theme = ExtResource("1_6lj32")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 40
+text = "Airport Properties"
+
+[node name="Travellers" type="GridContainer" parent="GridContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="Label" type="Label" parent="GridContainer/Travellers"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_6lj32")
+theme_override_colors/font_color = Color(0.164706, 0.164706, 0.164706, 1)
+theme_override_fonts/font = ExtResource("3_76l8i")
+text = "Waiting travellers"
+
+[node name="Count" type="Label" parent="GridContainer/Travellers"]
+layout_mode = 2
+theme = ExtResource("1_6lj32")
+theme_override_colors/font_color = Color(0.164706, 0.164706, 0.164706, 1)
+theme_override_fonts/font = ExtResource("3_76l8i")
+text = "10"

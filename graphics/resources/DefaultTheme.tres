@@ -1,0 +1,42 @@
+[gd_resource type="Theme" load_steps=10 format=3 uid="uid://bnptngex7lpvf"]
+
+[ext_resource type="FontFile" uid="uid://bou7slqtpu8oi" path="res://graphics/fonts/alegreya-sans/AlegreyaSans-Regular.ttf" id="1_5opv1"]
+[ext_resource type="FontFile" uid="uid://chp81n4ahq2ul" path="res://graphics/fonts/alegreya-sans/AlegreyaSans-Bold.ttf" id="1_qcdx1"]
+[ext_resource type="FontFile" uid="uid://cx1xvn8qu1f8h" path="res://graphics/fonts/alegreya-sans/AlegreyaSans-BoldItalic.ttf" id="2_p05nv"]
+[ext_resource type="FontFile" uid="uid://baligojbxbv6h" path="res://graphics/fonts/alegreya-sans/AlegreyaSans-Italic.ttf" id="3_gtgrd"]
+[ext_resource type="FontFile" uid="uid://bifln557hbhec" path="res://graphics/fonts/alegreya-sans/AlegreyaSans-Light.ttf" id="4_rnr6e"]
+[ext_resource type="FontFile" uid="uid://ba6b4i0hvok3c" path="res://graphics/fonts/alegreya-sans/AlegreyaSans-LightItalic.ttf" id="5_iqwf7"]
+[ext_resource type="FontFile" uid="uid://c4atkyav2jtw7" path="res://graphics/fonts/alegreya-sans/AlegreyaSans-Thin.ttf" id="6_2ijkk"]
+[ext_resource type="FontFile" uid="uid://d12o4sm0n6ym8" path="res://graphics/fonts/alegreya-sans/AlegreyaSans-ThinItalic.ttf" id="7_xbkt8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_epg0d"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.643137, 0.882353, 0.968627, 1)
+border_width_left = 8
+border_color = Color(0.121569, 0.454902, 0.796078, 1)
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+shadow_color = Color(0, 0, 0, 0.580392)
+shadow_size = 8
+shadow_offset = Vector2(2, 4)
+
+[resource]
+default_font = ExtResource("1_5opv1")
+default_font_size = 28
+/colors/Blue = Color(0.121569, 0.454902, 0.796078, 1)
+/colors/TextDark = Color(0.133333, 0.133333, 0.133333, 1)
+/colors/TextLight = Color(0.909804, 0.909804, 0.909804, 1)
+/font_sizes/Body = 24
+/font_sizes/Heading = 40
+/font_sizes/Subheading = 36
+/fonts/Bold = ExtResource("1_qcdx1")
+/fonts/BoldItalic = ExtResource("2_p05nv")
+/fonts/Italic = ExtResource("3_gtgrd")
+/fonts/Light = ExtResource("4_rnr6e")
+/fonts/LightItalic = ExtResource("5_iqwf7")
+/fonts/Thin = ExtResource("6_2ijkk")
+/fonts/ThinItalic = ExtResource("7_xbkt8")
+PopupPanel/styles/panel = SubResource("StyleBoxFlat_epg0d")

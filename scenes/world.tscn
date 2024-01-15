@@ -6,6 +6,7 @@
 [node name="world" type="Node2D"]
 
 [node name="WorldMap" type="Sprite2D" parent="."]
+z_index = 10
 texture = ExtResource("1_vd07e")
 centered = false
 metadata/_edit_lock_ = true
