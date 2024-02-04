@@ -1,7 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://bt2xyst8o5iji"]
+[gd_scene load_steps=5 format=3 uid="uid://bt2xyst8o5iji"]
 
 [ext_resource type="Script" path="res://scripts/Plane.cs" id="1_hq43d"]
+[ext_resource type="Shader" path="res://graphics/shaders/drop_shadow.gdshader" id="2_81spv"]
 [ext_resource type="Texture2D" uid="uid://c6gwrk7gv7brr" path="res://graphics/sprites/plane_sprite_1.png" id="2_clqru"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_afgcw"]
+shader = ExtResource("2_81spv")
 
 [node name="Plane" type="Node2D" groups=["Planes"]]
 z_index = 1
@@ -10,5 +14,6 @@ Speed = 50.0
 PassengerMax = 5
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_afgcw")
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("2_clqru")
