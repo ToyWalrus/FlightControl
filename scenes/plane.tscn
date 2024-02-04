@@ -6,6 +6,8 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_afgcw"]
 shader = ExtResource("2_81spv")
+shader_parameter/offset = Vector2(8, 8)
+shader_parameter/shadow_color = null
 
 [node name="Plane" type="Node2D" groups=["Planes"]]
 z_index = 1
