@@ -1,22 +1,36 @@
 using Godot;
 using System.Collections.Generic;
-using System.Text.Json;
+
+using TinyJson;
 
 namespace FlightControl.Systems
 {
     public class AirportSpawnSystem
     {
+
         // Data from https://github.com/mwgg/Airports
-        private static List<AirportJSON> airports;
+        private static List<AirportInfo> airports;
         public static void LoadAirports()
         {
             var file = FileAccess.Open("res://data/airports.json", FileAccess.ModeFlags.Read);
             var jsonString = file.GetAsText();
-            airports = JsonSerializer.Deserialize<List<AirportJSON>>(jsonString);
+            airports = jsonString.FromJson<List<AirportInfo>>();
             file.Close();
         }
 
-        private class AirportJSON
+        public static List<AirportInfo> Airports
+        {
+            get
+            {
+                if (airports == null)
+                {
+                    LoadAirports();
+                }
+                return airports;
+            }
+        }
+
+        public class AirportInfo
         {
             public string name { get; set; }
             public string icao { get; set; }

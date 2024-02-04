@@ -7,15 +7,19 @@
 
 [node name="WorldMap" type="Sprite2D" parent="."]
 z_index = 10
+position = Vector2(-5, 10)
 texture = ExtResource("1_vd07e")
 centered = false
-metadata/_edit_lock_ = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(6135, 2183)
-zoom = Vector2(0.325, 0.325)
+z_index = 11
+position = Vector2(2771, 2630)
+zoom = Vector2(0.75, 0.75)
 script = ExtResource("2_s7afb")
 ZoomSpeed = 0.075
 ZoomMin = 0.141
 ZoomMax = 1.6
-WorldRect = Rect2(0, 0, 11160, 5673)
+WorldRect = Rect2(2.08165e-12, 2.08165e-12, 11160, 6100)
+LatLonOffset = Vector2(-1.32, 1.96)
+DisplayAirports = true
+metadata/_edit_lock_ = true
