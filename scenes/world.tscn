@@ -1,15 +1,16 @@
 [gd_scene load_steps=3 format=3 uid="uid://u5absxyfkkel"]
 
-[ext_resource type="Texture2D" uid="uid://dinrxeafn3c1j" path="res://graphics/WorldMap.svg" id="1_vd07e"]
+[ext_resource type="Texture2D" uid="uid://dgp64kfeh1gc1" path="res://graphics/WorldMap_Named.svg" id="1_mvbfn"]
 [ext_resource type="Script" path="res://scripts/CameraController.cs" id="2_s7afb"]
 
 [node name="world" type="Node2D"]
 
 [node name="WorldMap" type="Sprite2D" parent="."]
 z_index = 10
-position = Vector2(-5, 10)
-texture = ExtResource("1_vd07e")
+position = Vector2(-55, 49)
+texture = ExtResource("1_mvbfn")
 centered = false
+metadata/_edit_lock_ = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
 z_index = 11
@@ -21,5 +22,4 @@ ZoomMin = 0.141
 ZoomMax = 1.6
 WorldRect = Rect2(2.08165e-12, 2.08165e-12, 11160, 6100)
 LatLonOffset = Vector2(-1.32, 1.96)
-DisplayAirports = true
 metadata/_edit_lock_ = true
