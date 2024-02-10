@@ -9,7 +9,7 @@ namespace FlightControl
 	public partial class Airport : Area2D
 	{
 		[Signal]
-		public delegate void OnTravellerCountChangedEventHandler(string count);
+		public delegate void OnTravellerCountChangedEventHandler();
 		[Signal]
 		public delegate void OnClickAirportEventHandler(Airport airport);
 
@@ -18,18 +18,18 @@ namespace FlightControl
 
 		[Export]
 		public int TravellerMax { get; set; }
-		public int TravellerCount { get => travellers.Count; }
+		public int TravellerCount { get => travelers.Count; }
 
 		private readonly Dictionary<Airport, List<Traveller>> travellerDestinations = new();
 		private readonly Dictionary<Plane, double> planeWaitCounter = new();
 		private readonly HashSet<Connection> connections = new();
-		private readonly List<Traveller> travellers = new();
+		private readonly List<Traveller> travelers = new();
 		private readonly HashSet<Plane> planes = new();
 
 		public override void _Ready()
 		{
 			SetAirportLabelText();
-			GetNode<AirportPropertiesPopup>("AirportProperties").SetAirport(this);
+			// GetNode<AirportPropertiesPopup>("AirportProperties").SetAirport(this);
 		}
 
 		// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -67,13 +67,13 @@ namespace FlightControl
 
 		public void AddTraveller(Traveller traveller)
 		{
-			travellers.Add(traveller);
+			travelers.Add(traveller);
 			UpdateDestinations();
 		}
 
 		public void RemoveTraveller(Traveller traveller)
 		{
-			travellers.Remove(traveller);
+			travelers.Remove(traveller);
 			UpdateDestinations();
 		}
 
@@ -84,13 +84,37 @@ namespace FlightControl
 			UnloadPlane(plane);
 		}
 
-		public List<Airport> GetTopDestinations(int count)
+		public IEnumerable<KeyValuePair<Airport, int>> GetTopFinalDestinations(int count)
+		{
+			var travelerFinalDestinations = new Dictionary<Airport, int>();
+
+			foreach (var traveller in travelers)
+			{
+				var finalDestination = traveller.Destination;
+				if (finalDestination == null) continue;
+
+				if (travelerFinalDestinations.ContainsKey(finalDestination))
+				{
+					travelerFinalDestinations[finalDestination]++;
+				}
+				else
+				{
+					travelerFinalDestinations.Add(finalDestination, 1);
+				}
+			}
+
+			return travelerFinalDestinations
+					.OrderByDescending(kvp => kvp.Value)
+					.Select(kvp => new KeyValuePair<Airport, int>(kvp.Key, kvp.Value))
+					.Take(count);
+		}
+
+		public IEnumerable<Airport> GetTopDestinations(int count)
 		{
 			return travellerDestinations
 					.OrderByDescending(kvp => kvp.Value.Count)
 					.Select(kvp => kvp.Key)
-					.Take(count)
-					.ToList();
+					.Take(count);
 		}
 
 		public IEnumerable<KeyValuePair<Airport, int>> GetDestinations()
@@ -108,7 +132,7 @@ namespace FlightControl
 		private void UnloadPlane(Plane plane)
 		{
 			// Add unloaded travellers to airport
-			travellers.AddRange(plane.Unload());
+			travelers.AddRange(plane.Unload());
 
 			// Update destinations after travellers list changed
 			UpdateDestinations();
@@ -118,7 +142,7 @@ namespace FlightControl
 		{
 			travellerDestinations.Clear();
 
-			foreach (var traveller in travellers)
+			foreach (var traveller in travelers)
 			{
 				var nextDestination = traveller.GetNextAirport();
 				if (nextDestination == null) continue;
@@ -133,7 +157,7 @@ namespace FlightControl
 				}
 			}
 
-			EmitSignal(SignalName.OnTravellerCountChanged, TravellerCount.ToString());
+			EmitSignal(SignalName.OnTravellerCountChanged);
 		}
 
 		private void UpdatePlaneWaitCounter(double delta)
@@ -182,7 +206,7 @@ namespace FlightControl
 
 			if (travellersToLoad.Count > 0)
 			{
-				travellers.RemoveAll(t => travellersToLoad.Contains(t) && !travellersStillWaiting.Contains(t));
+				travelers.RemoveAll(t => travellersToLoad.Contains(t) && !travellersStillWaiting.Contains(t));
 				UpdateDestinations();
 			}
 		}
@@ -206,9 +230,9 @@ namespace FlightControl
 			{
 				GD.Print($"Right click on {AirportName}");
 
-				var popup = GetNode<AirportPropertiesPopup>("AirportProperties");
-				popup.Position = (Vector2I)GetViewport().GetMousePosition();
-				popup.Popup();
+				// var popup = GetNode<AirportPropertiesPopup>("AirportProperties");
+				// popup.Position = (Vector2I)GetViewport().GetMousePosition();
+				// popup.Popup();
 			}
 		}
 

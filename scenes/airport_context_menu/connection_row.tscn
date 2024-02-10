@@ -37,7 +37,7 @@ texture = ExtResource("1_vxan6")
 expand_mode = 2
 stretch_mode = 4
 
-[node name="Label" type="Label" parent="NameContainer"]
+[node name="AirportName" type="Label" parent="NameContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "SLC"

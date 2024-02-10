@@ -52,6 +52,8 @@ namespace FlightControl
 
 		private readonly HashSet<Plane> planes = new();
 
+		public int PlaneCount => planes.Count;
+
 		public void AddPlane(Plane plane)
 		{
 			if (planes.Add(plane))
