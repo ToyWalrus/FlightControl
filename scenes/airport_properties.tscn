@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://bl2axnlepmg38"]
 
-[ext_resource type="Theme" uid="uid://bnptngex7lpvf" path="res://graphics/resources/DefaultTheme.tres" id="1_6lj32"]
+[ext_resource type="Theme" uid="uid://bnptngex7lpvf" path="res://data/DefaultTheme.tres" id="1_6lj32"]
 [ext_resource type="Script" path="res://scripts/AirportPropertiesPopup.cs" id="2_orlcq"]
 [ext_resource type="FontFile" uid="uid://chp81n4ahq2ul" path="res://graphics/fonts/alegreya-sans/AlegreyaSans-Bold.ttf" id="3_76l8i"]
 

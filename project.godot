@@ -17,16 +17,12 @@ config/icon="res://icon.svg"
 
 [display]
 
-window/size/viewport_width=1920
-window/size/viewport_height=1280
+window/size/viewport_width=1280
+window/size/viewport_height=720
 
 [dotnet]
 
 project/assembly_name="FlightControlGame"
-
-[gui]
-
-theme/custom="res://graphics/resources/DefaultTheme.tres"
 
 [input]
 

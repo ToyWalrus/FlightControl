@@ -1,0 +1,73 @@
+[gd_scene load_steps=6 format=3 uid="uid://b66icb247qr3p"]
+
+[ext_resource type="Theme" uid="uid://dld8wn3vai8ya" path="res://data/AirportContextMenuTheme.tres" id="1_25s67"]
+[ext_resource type="PackedScene" uid="uid://ct1mbjjacct15" path="res://scenes/airport_context_menu/traveler_destination_count.tscn" id="2_ay1pp"]
+[ext_resource type="Script" path="res://scripts/AirportContextMenu.cs" id="2_ig4kg"]
+[ext_resource type="PackedScene" uid="uid://dffrvl7vctwl6" path="res://scenes/airport_context_menu/connection_row.tscn" id="2_v6loc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ns6h1"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_size = 1
+shadow_offset = Vector2(2, 4)
+
+[node name="AirportContextMenu" type="PopupPanel"]
+size = Vector2i(400, 213)
+visible = true
+max_size = Vector2i(600, 1000)
+content_scale_aspect = 1
+theme = ExtResource("1_25s67")
+theme_override_styles/panel = SubResource("StyleBoxFlat_ns6h1")
+script = ExtResource("2_ig4kg")
+
+[node name="ContentLayout" type="VBoxContainer" parent="."]
+offset_left = 8.0
+offset_top = 4.0
+offset_right = 392.0
+offset_bottom = 209.0
+theme_override_constants/separation = 0
+
+[node name="AirportName" type="Label" parent="ContentLayout"]
+layout_mode = 2
+theme_type_variation = &"HeaderLarge"
+theme_override_font_sizes/font_size = 46
+text = "SLC"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="ContentLayout"]
+z_index = 1
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="TabContainer" type="TabContainer" parent="ContentLayout"]
+layout_mode = 2
+theme_override_constants/side_margin = -1
+
+[node name="Travelers" type="VBoxContainer" parent="ContentLayout/TabContainer"]
+layout_mode = 2
+
+[node name="TotalTravelers" type="Label" parent="ContentLayout/TabContainer/Travelers"]
+layout_mode = 2
+theme_type_variation = &"HeaderMedium"
+text = "Total: 10"
+
+[node name="TopDestinationsLabel" type="Label" parent="ContentLayout/TabContainer/Travelers"]
+layout_mode = 2
+text = "Top destinations"
+
+[node name="Row" parent="ContentLayout/TabContainer/Travelers" instance=ExtResource("2_ay1pp")]
+layout_mode = 2
+
+[node name="Connections" type="VBoxContainer" parent="ContentLayout/TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Row" parent="ContentLayout/TabContainer/Connections" instance=ExtResource("2_v6loc")]
+layout_mode = 2
