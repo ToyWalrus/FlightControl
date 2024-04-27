@@ -1,45 +1,39 @@
 using Godot;
 using System.Collections.Generic;
-
-using TinyJson;
+using System.Linq;
 
 namespace FlightControl.Systems
 {
-    public class AirportSpawnSystem
+    public partial class AirportSpawnSystem : Node2D
     {
+        [Export]
+        public int initialAirportCount = 3;
 
-        // Data from https://github.com/mwgg/Airports
-        private static List<AirportInfo> airports;
-        public static void LoadAirports()
-        {
-            var file = FileAccess.Open("res://data/airports.json", FileAccess.ModeFlags.Read);
-            var jsonString = file.GetAsText();
-            airports = jsonString.FromJson<List<AirportInfo>>();
-            file.Close();
-        }
+        private readonly List<Airport> airports = new();
+        private readonly HashSet<Airport> visibleAirports = new();
+        private float timeSinceLastSpawn = 0;
 
-        public static List<AirportInfo> Airports
+        public override void _Ready()
         {
-            get
+            airports.AddRange(GetTree().GetNodesInGroup("Airports").Cast<Airport>());
+            foreach (var airport in airports)
             {
-                if (airports == null)
+                airport.Visible = false;
+            }
+
+            var rand = new System.Random();
+            for (int i = 0; i < initialAirportCount; i++)
+            {
+                var airport = airports[rand.Next(airports.Count)];
+                while (visibleAirports.Contains(airport))
                 {
-                    LoadAirports();
+                    airport = airports[rand.Next(airports.Count)];
                 }
-                return airports;
+                airport.Visible = true;
+                visibleAirports.Add(airport);
             }
         }
 
-        public class AirportInfo
-        {
-            public string name { get; set; }
-            public string icao { get; set; }
-            public string iata { get; set; }
-            public string country { get; set; }
-            public string city { get; set; }
-            public string state { get; set; }
-            public double lat { get; set; }
-            public double lon { get; set; }
-        }
+        
     }
 }

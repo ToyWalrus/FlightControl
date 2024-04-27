@@ -1,20 +1,20 @@
-[gd_scene load_steps=3 format=3 uid="uid://u5absxyfkkel"]
+[gd_scene load_steps=4 format=3 uid="uid://u5absxyfkkel"]
 
 [ext_resource type="Texture2D" uid="uid://dgp64kfeh1gc1" path="res://graphics/WorldMap_Named.svg" id="1_mvbfn"]
 [ext_resource type="Script" path="res://scripts/CameraController.cs" id="2_s7afb"]
+[ext_resource type="PackedScene" uid="uid://vff62d2qhicn" path="res://scenes/airport.tscn" id="3_af630"]
 
 [node name="world" type="Node2D"]
 
 [node name="WorldMap" type="Sprite2D" parent="."]
-z_index = 10
 position = Vector2(-55, 49)
 texture = ExtResource("1_mvbfn")
 centered = false
 metadata/_edit_lock_ = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
-z_index = 11
-position = Vector2(2771, 2630)
+z_index = 1
+position = Vector2(2066, 2399)
 zoom = Vector2(0.75, 0.75)
 script = ExtResource("2_s7afb")
 ZoomSpeed = 0.075
@@ -23,3 +23,89 @@ ZoomMax = 1.6
 WorldRect = Rect2(2.08165e-12, 2.08165e-12, 11160, 6100)
 LatLonOffset = Vector2(-1.32, 1.96)
 metadata/_edit_lock_ = true
+
+[node name="Airports" type="Node2D" parent="."]
+
+[node name="MIA" parent="Airports" instance=ExtResource("3_af630")]
+position = Vector2(2622, 2826)
+scale = Vector2(0.25, 0.25)
+AirportName = "MIA"
+
+[node name="DCA" parent="Airports" instance=ExtResource("3_af630")]
+position = Vector2(2739, 2538)
+scale = Vector2(0.25, 0.25)
+AirportName = "DCA"
+
+[node name="EWR" parent="Airports" instance=ExtResource("3_af630")]
+position = Vector2(2858, 2313)
+scale = Vector2(0.25, 0.25)
+AirportName = "EWR"
+
+[node name="SLC" parent="Airports" instance=ExtResource("3_af630")]
+position = Vector2(1663, 2310)
+scale = Vector2(0.25, 0.25)
+
+[node name="BIL" parent="Airports" instance=ExtResource("3_af630")]
+position = Vector2(1824, 2180)
+scale = Vector2(0.25, 0.25)
+AirportName = "BIL"
+
+[node name="ABQ" parent="Airports" instance=ExtResource("3_af630")]
+position = Vector2(1695, 2505)
+scale = Vector2(0.25, 0.25)
+AirportName = "ABQ"
+
+[node name="LAS" parent="Airports" instance=ExtResource("3_af630")]
+position = Vector2(1542, 2435)
+scale = Vector2(0.25, 0.25)
+AirportName = "LAS"
+
+[node name="LAX" parent="Airports" instance=ExtResource("3_af630")]
+position = Vector2(1420, 2544)
+scale = Vector2(0.25, 0.25)
+AirportName = "LAX"
+
+[node name="BFI" parent="Airports" instance=ExtResource("3_af630")]
+position = Vector2(1277, 2098)
+scale = Vector2(0.25, 0.25)
+AirportName = "BFI"
+
+[node name="SFO" parent="Airports" instance=ExtResource("3_af630")]
+position = Vector2(1279, 2269)
+scale = Vector2(0.25, 0.25)
+AirportName = "SFO"
+
+[node name="HOU" parent="Airports" instance=ExtResource("3_af630")]
+position = Vector2(2099, 2773)
+scale = Vector2(0.25, 0.25)
+AirportName = "HOU"
+
+[node name="RBD" parent="Airports" instance=ExtResource("3_af630")]
+position = Vector2(2098, 2659)
+scale = Vector2(0.25, 0.25)
+AirportName = "RBD"
+
+[node name="OKC" parent="Airports" instance=ExtResource("3_af630")]
+position = Vector2(2190, 2512)
+scale = Vector2(0.25, 0.25)
+AirportName = "OKC"
+
+[node name="DTW" parent="Airports" instance=ExtResource("3_af630")]
+position = Vector2(2549, 2269)
+scale = Vector2(0.25, 0.25)
+AirportName = "DTW"
+
+[node name="ATL" parent="Airports" instance=ExtResource("3_af630")]
+position = Vector2(2529, 2635)
+scale = Vector2(0.25, 0.25)
+AirportName = "ATL"
+
+[node name="MDW" parent="Airports" instance=ExtResource("3_af630")]
+position = Vector2(2372, 2146)
+scale = Vector2(0.25, 0.25)
+AirportName = "MDW"
+
+[node name="JNU" parent="Airports" instance=ExtResource("3_af630")]
+position = Vector2(972, 1651)
+scale = Vector2(0.25, 0.25)
+AirportName = "JNU"
